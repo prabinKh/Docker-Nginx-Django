@@ -1,0 +1,78 @@
+{% extends 'convertor/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3>Upload Media File</h3>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <div class="form-group mb-3">
+                        <label for="{{ form.file.id_for_label }}" class="form-label">
+                            {{ form.file.label }}:
+                        </label>
+                        {{ form.file }}
+                        {% if form.file.help_text %}
+                            <small class="form-text text-muted">{{ form.file.help_text }}</small>
+                        {% endif %}
+                        {% if form.file.errors %}
+                            {% for error in form.file.errors %}
+                                <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="{{ form.file_type.id_for_label }}" class="form-label">
+                            {{ form.file_type.label }}:
+                        </label>
+                        {{ form.file_type }}
+                        {% if form.file_type.errors %}
+                            {% for error in form.file_type.errors %}
+                                <div class="alert alert-danger">{{ error }}</div>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group mb-3" id="language-group" style="display: none;">
+                        <label for="{{ form.target_language.id_for_label }}" class="form-label">
+                            {{ form.target_language.label }}:
+                        </label>
+                        {{ form.target_language }}
+                        {% if form.target_language.help_text %}
+                            <small class="form-text text-muted">{{ form.target_language.help_text }}</small>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Upload and Process</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileTypeSelect = document.getElementById('id_file_type');
+    const languageGroup = document.getElementById('language-group');
+    
+    // Initial check
+    if (fileTypeSelect.value === 'video') {
+        languageGroup.style.display = 'block';
+    }
+    
+    // Change event listener
+    fileTypeSelect.addEventListener('change', function() {
+        if (this.value === 'video') {
+            languageGroup.style.display = 'block';
+        } else {
+            languageGroup.style.display = 'none';
+        }
+    });
+});
+</script>
+{% endblock %}
